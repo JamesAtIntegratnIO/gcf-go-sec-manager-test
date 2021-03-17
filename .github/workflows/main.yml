@@ -22,14 +22,22 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
       with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
     - uses: actions/checkout@master
     - name: Archive Release
+    - id: archive-release
       uses: thedoctor0/zip-release@master
       with:
         filename: 'gfc-go-sec-manager-test.zip'
         exclusions: '*.git*'
+    - id: upload-file
+      uses: google-github-actions/upload-cloud-storage@main
+      with:
+        path: ./gfc-go-sec-manager-test.zip
+        dest: ${{ secrets.GCP_BUCKET_NAME }}
 
