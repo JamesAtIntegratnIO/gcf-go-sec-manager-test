@@ -1,4 +1,4 @@
-module jamesAtTensure.io/secretmanagersampler
+module jamesattensure.io/secretmanagersampler
 
 go 1.15
 
