@@ -29,7 +29,6 @@ jobs:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
     - uses: actions/checkout@master
-    - name: Archive Release
     - id: archive-release
       uses: thedoctor0/zip-release@master
       with:
