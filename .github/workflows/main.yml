@@ -26,13 +26,10 @@ jobs:
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
-    - uses: actions/checkout@v2
-    - id: Deploy
-      uses: google-github-actions/deploy-cloud-functions@main
+    - uses: actions/checkout@master
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
       with:
-        name: gcf-go-sec-manager-test
-        runtime: go113
-          # Example of using the output
-    - id: test
-      run: curl "${{ steps.deploy.outputs.url }}"
-        echo test, and deploy your project.
+        filename: 'gfc-go-sec-manager-test.zip'
+        exclusions: '*.git*'
+
