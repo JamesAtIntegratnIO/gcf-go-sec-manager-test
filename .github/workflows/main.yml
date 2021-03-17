@@ -40,4 +40,5 @@ jobs:
       with:
         path: 'gcf-go-sec-manager-test.zip'
         destination: ${{ secrets.GCP_BUCKET_NAME }}
+        gzip: false
 
