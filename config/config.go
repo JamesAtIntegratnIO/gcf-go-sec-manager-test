@@ -50,7 +50,6 @@ func getSecretFromGSM() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("%+v\n", resp.Payload.Data)
 	return resp.Payload.Data, nil
 }
 
@@ -60,16 +59,16 @@ func GetConfig() (*Config, error) {
 	data, err := getSecretFromGSM()
 	var err2 error
 	if err != nil {
-		log.Println("Could not retrieve from Google Secret Manager")
+		log.Printf("Could not retrieve from Google Secret Manager %v", err)
 		data, err2 = ioutil.ReadFile("./data.yaml")
 		if err2 != nil {
-			return nil, fmt.Errorf("First Error: %w, Second Error: %w", err, err2)
+			return nil, fmt.Errorf("first error: %v, second error: %v", err, err2)
 		}
 	}
 
-	err := yaml.Unmarshal([]byte(data), &c)
-	if err != nil {
-		return nil, err
+	err3 := yaml.Unmarshal([]byte(data), &c)
+	if err3 != nil {
+		return nil, err3
 	}
 	return c, nil
 }
