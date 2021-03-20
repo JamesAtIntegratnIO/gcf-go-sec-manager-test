@@ -1,5 +1,4 @@
 module jamesattensure.io/secretmanagersampler
-
 go 1.15
 
 require (
