@@ -35,13 +35,22 @@ func setGcloudVars() gcloudVars {
 }
 
 func (g gcloudVars) getSecretFromGSM() ([]byte, error) {
+	if g.projectID == "" || g.secretName == "" {
+		return nil, errors.New(`
+		environment variables for gcp are not set
+		please set 'PROJECT_ID', 'SECRET_NAME', and 'SECRET_VERSION'
+		`)
+	}
 	ctx := context.Background()
 	c, err := secretmanager.NewClient(ctx)
 	if err != nil {
 		return nil, err
 	}
 	req := &secretmanagerpb.AccessSecretVersionRequest{
-		Name: fmt.Sprintf("projects/%s/secrets/%s/versions/%s", g.projectID, g.secretName, g.secretVersion),
+		Name: fmt.Sprintf("projects/%s/secrets/%s/versions/%s",
+			g.projectID,
+			g.secretName,
+			g.secretVersion),
 	}
 	resp, err := c.AccessSecretVersion(ctx, req)
 	if err != nil {
@@ -51,7 +60,9 @@ func (g gcloudVars) getSecretFromGSM() ([]byte, error) {
 }
 
 // GetConfig returns a struct of type Config
-func GetConfig(useGCPSecrets bool, yamlConfig bool, jsonConfig bool, filePath string, c interface{}) error {
+func GetConfig(useGCPSecrets bool,
+	yamlConfig bool, jsonConfig bool,
+	filePath string, config interface{}) error {
 	var data []byte
 	var err error
 	if yamlConfig && jsonConfig {
@@ -71,12 +82,12 @@ func GetConfig(useGCPSecrets bool, yamlConfig bool, jsonConfig bool, filePath st
 		}
 	}
 	if yamlConfig {
-		err = yaml.Unmarshal([]byte(data), &c)
+		err = yaml.Unmarshal([]byte(data), &config)
 		if err != nil {
 			return err
 		}
 	} else if jsonConfig {
-		err = json.Unmarshal([]byte(data), &c)
+		err = json.Unmarshal([]byte(data), &config)
 		if err != nil {
 			return err
 		}
