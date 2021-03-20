@@ -13,20 +13,17 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Config is a yaml struct of config values
-type Config struct{}
+type gcloudVars struct {
+	projectID     string
+	secretName    string
+	secretVersion string
+}
 
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
 	}
 	return fallback
-}
-
-type gcloudVars struct {
-	projectID     string
-	secretName    string
-	secretVersion string
 }
 
 func setGcloudVars() gcloudVars {
